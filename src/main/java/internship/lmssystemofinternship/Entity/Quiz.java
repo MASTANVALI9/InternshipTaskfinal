@@ -1,5 +1,8 @@
 package internship.lmssystemofinternship.Entity;
 import jakarta.persistence.*;
+
+import java.util.List;
+
 @Entity
 @Table(name = "quizzes")
 public class Quiz {
@@ -8,5 +11,14 @@ public class Quiz {
 
     private String title;
 
-    private Long courseId; // Each quiz belongs to a course
+    private Long courseId;
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private course courses;
+
+    // One Quiz has many Questions
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    private List<Question> questions;
+
+    // Each quiz belongs to a course
 }

@@ -14,4 +14,13 @@ public class progress {
     private Long courseId;
     private int completionPercent;
     private int score;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private user student;
+
+    // Course being tracked
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private course courses;
 }
