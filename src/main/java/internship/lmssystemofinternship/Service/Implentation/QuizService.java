@@ -28,7 +28,7 @@ public class QuizService {
         return modelMapper.map(quiz, QuizDto.class);
     }
     public QuizDto AddQQuiz(QuizDto quizDto) {
-        Quiz quiz = convertToEntity(quizDto)
+        Quiz quiz = convertToEntity(quizDto);
         Quiz saved = quizRepository.save(quiz);
         return convertToDto(saved);
 

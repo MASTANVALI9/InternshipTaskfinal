@@ -12,4 +12,6 @@ public interface ProgressRepository extends Repository<progress, Long> {
     Collection<Object> findByCourseId(Long courseId);
 
     ModelMapper findById(Long id);
+
+    progress save(progress progresss);
 }

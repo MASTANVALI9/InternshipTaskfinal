@@ -36,4 +36,7 @@ public class CourseSerivce {
         course saved = courseRepo. save(courses);
         return convertToDTO(saved);
     }
+    public CourseDto getcourseByid(Long courseId) {
+        return courseRepo.findById(courseId);
+    }
 }

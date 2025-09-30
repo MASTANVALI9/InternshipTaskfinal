@@ -26,7 +26,7 @@ public class ProgreessSerrvice {
         return modelMapper.map(progressDTO, progress.class);
     }
 
-    public ProgressDto   saveProgress(ProgressDto dto) {
+    public ProgressDto  saveProgress(ProgressDto dto) {
         progress progresss = convertToEntity(dto);
         progress saved = progressRepository.save(progresss);
         return convertToDTO(saved);
@@ -38,7 +38,7 @@ public class ProgreessSerrvice {
                 .orElse(null);
     }
 
-    public List<ProgressDto> getProgressByUser(Long userId) {
+    public List<ProgressDto> getprogressByUser(Long userId) {
         return progressRepository.findByUserId(userId)
                 .stream()
                 .map(this::convertToDTO)

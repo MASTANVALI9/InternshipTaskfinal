@@ -9,4 +9,6 @@ public interface CourseRepo extends Repository<course, Long> {
     List<CourseDto> findAll();
 
     course save(course courses);
+
+    CourseDto findById(Long courseId);
 }
