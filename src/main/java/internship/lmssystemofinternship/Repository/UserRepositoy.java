@@ -12,4 +12,10 @@ public interface UserRepositoy extends Repository<user, Long> {
     List<user> findAll();
 
     user save(user users);
+
+    Long id(Long id);
+
+    user findByEmail(String email);
+
+    user findByCourseId(Long courseId);
 }
