@@ -1,17 +1,10 @@
 package internship.lmssystemofinternship.Repository;
 
-import internship.lmssystemofinternship.Entity.progress;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.repository.Repository;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import internship.lmssystemofinternship.Entity.Progress;
 
-import java.util.Collection;
-
-public interface ProgressRepository extends Repository<progress, Long> {
-    Collection<Object> findByUserId(Long userId);
-
-    Collection<Object> findByCourseId(Long courseId);
-
-    ModelMapper findById(Long id);
-
-    progress save(progress progresss);
+public interface ProgressRepository extends JpaRepository<Progress, Long> {
+    List<Progress> findByUser_Id(Long userId);
+    List<Progress> findByCourse_CourseId(Long courseId);
 }

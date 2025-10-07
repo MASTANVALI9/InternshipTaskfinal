@@ -1,18 +1,21 @@
 package internship.lmssystemofinternship.Controller;
 
-import internship.lmssystemofinternship.Dto.CourseDto;
-import internship.lmssystemofinternship.Dto.ProgressDto;
-import internship.lmssystemofinternship.Service.Implentation.CourseSerivce;
+import java.util.List;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
+import internship.lmssystemofinternship.Dto.CourseDto;
+import internship.lmssystemofinternship.Service.Implentation.CourseSerivce;
+import lombok.RequiredArgsConstructor;
 
-@RestController("/api/courses")
+@RestController
+@RequestMapping("/api/courses")
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseSerivce courseSerivce;
@@ -21,9 +24,34 @@ public class CourseController {
     public ResponseEntity<List<CourseDto>> getAllCourses() {
         return ResponseEntity.ok(courseSerivce.getAllCourses());
     }
-    @GetMapping("/Id")
-    public ResponseEntity<CourseDto> getCourseById(@PathVariable Long courseId) {
+
+    @GetMapping("/{courseId}")
+    public ResponseEntity<CourseDto> getCourseById(@PathVariable("courseId") Long courseId) {
         return ResponseEntity.ok(courseSerivce.getcourseByid(courseId));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<CourseDto> addCourse(@RequestBody CourseDto courseDto) {
+        CourseDto created = courseSerivce.createCourse(courseDto);
+        return ResponseEntity.ok(created);
+    }
+
+    @PostMapping("/update/{courseId}")
+    public ResponseEntity<CourseDto> updateCourse(@PathVariable Long courseId, @RequestBody CourseDto courseDto) {
+        CourseDto updated = courseSerivce.updateCourse(courseId, courseDto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping("/delete/{courseId}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long courseId) {
+        courseSerivce.deleteCourse(courseId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/enroll/{courseId}/student/{studentId}")
+    public ResponseEntity<Void> enrollStudent(@PathVariable Long courseId, @PathVariable Long studentId) {
+        courseSerivce.enrollStudent(courseId, studentId);
+        return ResponseEntity.ok().build();
     }
 
 

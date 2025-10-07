@@ -1,12 +1,12 @@
 package internship.lmssystemofinternship.Service;
 
 import internship.lmssystemofinternship.Dto.UserDto;
-import internship.lmssystemofinternship.Entity.user;
+import internship.lmssystemofinternship.Entity.User;
 
 import java.util.List;
 
 public interface ServiceForInter {
-    user saveuser (user users);
-    user getById(Long id);
-    public  List<UserDto> getAllUsers()
+    User saveuser (User users);
+    User getById(Long id);
+    public  List<UserDto> getAllUsers();
 }

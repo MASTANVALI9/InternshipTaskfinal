@@ -1,14 +1,9 @@
 package internship.lmssystemofinternship.Repository;
 
-import internship.lmssystemofinternship.Dto.CourseDto;
-import internship.lmssystemofinternship.Entity.course;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-public interface CourseRepo extends Repository<course, Long> {
-    List<CourseDto> findAll();
+import internship.lmssystemofinternship.Entity.Course;
 
-    course save(course courses);
-
-    CourseDto findById(Long courseId);
+public interface CourseRepo extends JpaRepository<Course, Long> {
+    // JpaRepository provides findAll, save, and findById(Long id)
 }

@@ -1,13 +1,14 @@
 package internship.lmssystemofinternship.Dto;
 
-import internship.lmssystemofinternship.Entity.user;
+
 import lombok.Data;
 import lombok.Value;
+import org.springframework.security.core.userdetails.User;
 
 import java.io.Serializable;
 
 /**
- * DTO for {@link user}
+ * DTO for {@link User}
  */
 @Data
 public class UserDto implements Serializable {

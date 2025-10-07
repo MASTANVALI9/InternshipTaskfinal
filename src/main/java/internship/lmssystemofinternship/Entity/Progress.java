@@ -1,5 +1,6 @@
 package internship.lmssystemofinternship.Entity;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,24 +12,27 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "questions")
+@Table(name = "progress")
 @Getter
 @Setter
-public class Question {
+public class Progress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private int completionPercent;
+    private int score;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-
-    @ManyToOne
-    @JoinColumn(name = "quiz_id")
-    private Quiz quiz;
-
-    // One quiz has many questions
 }
+
+
+
+

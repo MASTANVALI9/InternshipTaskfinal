@@ -22,7 +22,7 @@ public class ProgressController {
 
     @PostMapping
     public ResponseEntity<ProgressDto> SaveProgress(@RequestBody ProgressDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(progressService.saveProgress(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(progressService.saveProgress(dto));
     }
 
     @GetMapping("/{id}")
@@ -33,12 +33,14 @@ public class ProgressController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ProgressDto>> GetProgressByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(progressService.getprogressByUser(userId);
+        return ResponseEntity.ok(progressService.getprogressByUser(userId));
     }
 
     @GetMapping("/course/{courseId}")
-    public List<ProgressDto> GetProgressByCourse(@PathVariable Long courseId) {
-        return progressService.getProgressByCourse(courseId);
+    public ResponseEntity<List<ProgressDto>> GetProgressByCourse(@PathVariable Long courseId) {
+        return ResponseEntity.ok(progressService.getprogressByCourse(courseId));
     }
+//        return progressService.getProgressByCourse(courseId);
+//    }
 
 }

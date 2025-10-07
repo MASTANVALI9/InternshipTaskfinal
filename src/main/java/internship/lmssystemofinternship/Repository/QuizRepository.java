@@ -1,15 +1,9 @@
 package internship.lmssystemofinternship.Repository;
 
-import internship.lmssystemofinternship.Dto.QuizDto;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import internship.lmssystemofinternship.Entity.Quiz;
-import org.springframework.data.repository.Repository;
 
-import java.util.List;
-
-public interface QuizRepository extends Repository<Quiz, Long> {
-    List<QuizDto> findAll();
-
-    QuizDto findById(Long id);
-
-    Quiz save(Quiz quiz);
+public interface QuizRepository extends JpaRepository<Quiz, Long> {
+    // JpaRepository provides findAll, findById, save
 }

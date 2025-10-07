@@ -13,4 +13,4 @@ public class QuizDto implements Serializable {
     private Long id;
     String title;
     Long courseId;
-}
+ }

@@ -1,17 +1,9 @@
 package internship.lmssystemofinternship.Repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import internship.lmssystemofinternship.Entity.Question;
-import org.springframework.data.repository.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface QuestionRepository extends Repository<Question, Long> {
-    List<Question> findAll();
-
-    Optional<Question> findById(Long id);
-
-    Question save(Question question);
-
-    void deleteById(Long id);
+public interface QuestionRepository extends JpaRepository<Question, Long> {
+    // JpaRepository provides findAll, findById, save, deleteById
 }

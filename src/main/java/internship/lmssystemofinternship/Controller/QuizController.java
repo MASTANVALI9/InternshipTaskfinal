@@ -1,11 +1,17 @@
 package internship.lmssystemofinternship.Controller;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import internship.lmssystemofinternship.Dto.QuizDto;
 import internship.lmssystemofinternship.Service.Implentation.QuizService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/quizzes")
@@ -31,7 +37,6 @@ public class QuizController {
         }
         return ResponseEntity.ok(quizDto);
     }
-
     @PostMapping
     public ResponseEntity<QuizDto> addQuiz(@RequestBody QuizDto quizDto) {
         QuizDto savedQuiz = quizService.addQuiz(quizDto);

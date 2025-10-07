@@ -1,12 +1,15 @@
 package internship.lmssystemofinternship.Service.Implentation;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
 import internship.lmssystemofinternship.Dto.QuizDto;
 import internship.lmssystemofinternship.Entity.Quiz;
 import internship.lmssystemofinternship.Repository.QuizRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +27,12 @@ public class QuizService {
     }
 
     public QuizDto getQuizById(Long id) {
-        return quizRepository.findById(id).stream()
+        return quizRepository.findById(id)
                 .map(this::convertToDto)
                 .orElse(null);
     }
+
+
 
     private Quiz convertToEntity(QuizDto quizDto) {
         return modelMapper.map(quizDto, Quiz.class);
@@ -37,10 +42,10 @@ public class QuizService {
         return modelMapper.map(quiz, QuizDto.class);
     }
 
-    public QuizDto addQuiz(QuizDto quizDto) {
-        Quiz quiz = convertToEntity(quizDto);
-        Quiz saved = quizRepository.save(quiz);
-        return convertToDto(saved);
-    }
+   public QuizDto addQuiz(QuizDto quizDto) {
+       Quiz quiz = convertToEntity(quizDto);
+       Quiz saved = quizRepository.save(quiz);
+       return convertToDto(saved);
+   }
 }
 

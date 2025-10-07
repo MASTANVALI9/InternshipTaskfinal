@@ -6,24 +6,21 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "quizzes")
+@Table(name = "modules")
 @Getter
 @Setter
-public class Quiz {
-
+public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
+    private String description;
 
-    // Each quiz belongs to one course
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
-    // One Quiz has many Questions
-    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
-    private List<Question> questions;
-
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL)
+    private List<Lesson> lessons;
 }

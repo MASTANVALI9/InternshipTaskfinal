@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LMS System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #333 !important;
+        }
+        .main-container {
+            padding: 30px 0;
+        }
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px 20px 0 0 !important;
+            border: none;
+            padding: 20px;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .stats-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: none;
+        }
+        .stats-card:hover {
+            transform: translateY(-3px);
+        }
+        .stats-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .stats-label {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        .btn-logout {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 20px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            color: white;
+        }
+        .welcome-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .role-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .action-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        .action-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .action-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap me-2"></i>LMS System
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span id="userDisplayName">Loading...</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-3">Welcome back, <span id="welcomeUsername">User</span>!</h2>
+                    <p class="mb-2">Role: <span class="role-badge" id="userRole">STUDENT</span></p>
+                    <p class="text-muted">Manage your learning journey and track your progress.</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="stats-card">
+                        <div class="stats-icon text-success">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stats-number text-success" id="currentDate">--</div>
+                        <div class="stats-label">Today's Date</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="stats-icon text-primary">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stats-number text-primary" id="coursesCount">0</div>
+                    <div class="stats-label">Courses</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="stats-icon text-success">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stats-number text-success" id="completedCount">0</div>
+                    <div class="stats-label">Completed</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="stats-icon text-warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stats-number text-warning" id="inProgressCount">0</div>
+                    <div class="stats-label">In Progress</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <div class="stats-icon text-info">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stats-number text-info" id="progressPercentage">0%</div>
+                    <div class="stats-label">Progress</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h4>
+            </div>
+            <div class="card-body">
+                <div class="quick-actions">
+                    <div class="action-card" onclick="navigateToCourses()">
+                        <div class="action-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="action-title">Browse Courses</div>
+                        <div class="action-description">Explore available courses and enroll</div>
+                    </div>
+                    <div class="action-card" onclick="navigateToProgress()">
+                        <div class="action-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="action-title">View Progress</div>
+                        <div class="action-description">Track your learning progress</div>
+                    </div>
+                    <div class="action-card" onclick="navigateToQuizzes()">
+                        <div class="action-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="action-title">Take Quizzes</div>
+                        <div class="action-description">Test your knowledge</div>
+                    </div>
+                    <div class="action-card" onclick="navigateToProfile()">
+                        <div class="action-icon">
+                            <i class="fas fa-user-edit"></i>
+                        </div>
+                        <div class="action-title">Edit Profile</div>
+                        <div class="action-description">Update your information</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="dashboard-card mt-4">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-history me-2"></i>Recent Activity</h4>
+            </div>
+            <div class="card-body">
+                <div id="recentActivity">
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>No recent activity to display</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+            
+            if (!token || !username) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            // Set user information
+            document.getElementById('welcomeUsername').textContent = username;
+            document.getElementById('userDisplayName').textContent = username;
+            
+            // Set current date
+            const today = new Date();
+            document.getElementById('currentDate').textContent = today.toLocaleDateString();
+            
+            // Load user data
+            loadUserData();
+        });
+        
+        async function loadUserData() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const userData = await response.json();
+                    document.getElementById('userRole').textContent = userData.role || 'STUDENT';
+                    
+                    // Load statistics based on role
+                    loadStatistics(userData.role);
+                } else {
+                    console.error('Failed to load user data');
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        async function loadStatistics(role) {
+            try {
+                const token = localStorage.getItem('token');
+                
+                // Load courses count
+                const coursesResponse = await fetch('/api/courses', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (coursesResponse.ok) {
+                    const courses = await coursesResponse.json();
+                    document.getElementById('coursesCount').textContent = courses.length || 0;
+                }
+                
+                // Load progress data
+                const progressResponse = await fetch('/api/progress', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (progressResponse.ok) {
+                    const progressData = await progressResponse.json();
+                    const completed = progressData.filter(p => p.status === 'COMPLETED').length;
+                    const inProgress = progressData.filter(p => p.status === 'IN_PROGRESS').length;
+                    const total = progressData.length;
+                    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+                    
+                    document.getElementById('completedCount').textContent = completed;
+                    document.getElementById('inProgressCount').textContent = inProgress;
+                    document.getElementById('progressPercentage').textContent = percentage + '%';
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.href = '/login';
+        }
+        
+        function navigateToCourses() {
+            // Implement navigation to courses page
+            alert('Courses page - Coming soon!');
+        }
+        
+        function navigateToProgress() {
+            // Implement navigation to progress page
+            alert('Progress page - Coming soon!');
+        }
+        
+        function navigateToQuizzes() {
+            // Implement navigation to quizzes page
+            alert('Quizzes page - Coming soon!');
+        }
+        
+        function navigateToProfile() {
+            // Implement navigation to profile page
+            alert('Profile page - Coming soon!');
+        }
+    </script>
+</body>
+</html>
