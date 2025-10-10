@@ -1,22 +1,25 @@
 package internship.lmssystemofinternship.Controller.AuthControl;
 
-import internship.lmssystemofinternship.Entity.User;
-import internship.lmssystemofinternship.Enum.Roles;
-import internship.lmssystemofinternship.Repository.UserRepository;
-import internship.lmssystemofinternship.Utility.JwtUtility;
+import java.util.Set;
 
-import jakarta.validation.Valid;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import internship.lmssystemofinternship.Entity.User;
+import internship.lmssystemofinternship.Enum.Roles;
+import internship.lmssystemofinternship.Repository.UserRepository;
+import internship.lmssystemofinternship.Utility.JwtUtility;
+import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.Setter;
 
 @RestController
 @RequestMapping("/auth")
@@ -66,7 +69,7 @@ public class AuthController {
                     ? Roles.STUDENT
                     : Roles.valueOf(request.getRole().toUpperCase());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid role"));
+            return ResponseEntity.badRequest().body(new ErrorResponse("Invalid role. Allowed roles: STUDENT, ADMIN"));
         }
 
         // Create and save user
@@ -120,6 +123,6 @@ public class AuthController {
     public static class RegisterRequest {
         private String username;
         private String password;
-        private String role; // optional: ADMIN, INSTRUCTOR, STUDENT
+        private String role; // optional: ADMIN, STUDENT (INSTRUCTOR not currently supported)
     }
 }

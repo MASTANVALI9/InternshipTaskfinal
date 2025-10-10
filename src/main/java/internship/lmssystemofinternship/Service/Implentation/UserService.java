@@ -2,7 +2,6 @@ package internship.lmssystemofinternship.Service.Implentation;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class UserService {
         return modelMapper.map(user, UserDto.class);
     }
 
-    private UserDto converToDto(Optional<User> users) {
+    public UserDto converToDto(Optional<User> users) {
         return users.map(u -> modelMapper.map(u, UserDto.class)).orElse(null);
     }
 

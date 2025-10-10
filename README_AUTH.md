@@ -160,3 +160,5 @@ The authentication system is now complete and ready for use. You can extend it b
 - Adding more user profile fields
 - Creating role-specific dashboards
 - Adding course enrollment features
+
+

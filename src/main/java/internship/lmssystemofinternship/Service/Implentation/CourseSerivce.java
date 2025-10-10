@@ -1,17 +1,15 @@
 package internship.lmssystemofinternship.Service.Implentation;
-import internship.lmssystemofinternship.Entity.User;
-import internship.lmssystemofinternship.Repository.UserRepository;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import internship.lmssystemofinternship.Dto.CourseDto;
 import internship.lmssystemofinternship.Entity.Course;
+import internship.lmssystemofinternship.Entity.User;
 import internship.lmssystemofinternship.Repository.CourseRepo;
+import internship.lmssystemofinternship.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
