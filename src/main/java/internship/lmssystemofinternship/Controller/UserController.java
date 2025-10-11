@@ -85,7 +85,7 @@ public class UserController {
         }
 
         String username = authentication.getName();
-        Optional<User> userOpt = userRepository.findByUsername(username);
+        Optional<User> userOpt = userRepository.findFirstByUsername(username);
 
         if (userOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -104,7 +104,7 @@ public class UserController {
             }
 
             String username = authentication.getName();
-            Optional<User> userOpt = userRepository.findByUsername(username);
+            Optional<User> userOpt = userRepository.findFirstByUsername(username);
 
             if (userOpt.isEmpty()) {
                 return ResponseEntity.notFound().build();

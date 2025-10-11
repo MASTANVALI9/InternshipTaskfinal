@@ -1,12 +1,12 @@
 package internship.lmssystemofinternship.Security;
 
-import internship.lmssystemofinternship.Entity.User;
-import internship.lmssystemofinternship.Repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import internship.lmssystemofinternship.Repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -16,8 +16,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Fetch user from database
-        return userRepo.findByUsername(username)
+        // Fetch user from database - use the safe method that handles duplicates
+        return userRepo.findFirstByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 }

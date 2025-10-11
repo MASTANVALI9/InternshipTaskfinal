@@ -1,16 +1,16 @@
 package internship.lmssystemofinternship.Repository;
 
-import internship.lmssystemofinternship.Entity.User;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import internship.lmssystemofinternship.Entity.User;
 
 @DataJpaTest
 class UserRepositoryTest {
@@ -21,23 +21,23 @@ class UserRepositoryTest {
     static void beforeAll() {
         System.out.println("testing jpa");
     }
-    @Test
+//    @Test
 
-    void testFindByEmail() {
-        // Arrange
-        User user = new User();
-        user.setUsername("mastan");
-        user.setEmail("mastan@gmail.com");
-        user.setPassword("12345");
-        userRepository.save(user);
-
-        // Act
-        Optional<User> found = userRepository.findByEmail("mastan@gmail.com");
-
-        // Assert
-        assertTrue(found.isPresent());
-        assertEquals("mastan", found.get().getUsername());
-    }
+//    void testFindByEmail() {
+//        // Arrange
+//        User user = new User();
+//        user.setUsername("mastan");
+//        user.setEmail("mastan@gmail.com");
+//        user.setPassword("12345");
+//        userRepository.save(user);
+//
+//        // Act
+//        Optional<User> found = userRepository.findByEmail("mastan@gmail.com");
+//
+//        // Assert
+//        assertTrue(found.isPresent());
+//        assertEquals("mastan", found.get().getUsername());
+//    }
 
     @Test
     void testFindByEmailContaining() {
@@ -67,7 +67,7 @@ class UserRepositoryTest {
         user.setPassword("pass");
         userRepository.save(user);
 
-        Optional<User> found = userRepository.findByUsername("testUser");
+        Optional<User> found = userRepository.findFirstByUsername("testUser");
 
         assertTrue(found.isPresent());
         assertEquals("test@user.com", found.get().getEmail());
@@ -108,5 +108,15 @@ class UserRepositoryTest {
 
         List<User> afterDelete = userRepository.findAll();
         assertTrue(afterDelete.isEmpty());
+    }
+    @Test
+    void testFindByEmail() {
+        User user = new User();
+        userRepository.save(user);
+
+        Optional<User> found = userRepository.findByEmail("mastan@gmail.com");
+
+        assertTrue(found.isPresent());
+        assertEquals("mastan", found.get().getUsername());
     }
 }

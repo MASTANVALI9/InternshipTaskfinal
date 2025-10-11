@@ -29,39 +29,10 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Create admin users if they don't exist
-        if (userRepository.findByUsername("admin").isEmpty()) {
-            User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setEmail("admin@lms.com");
-            admin.setRoles(Set.of(Roles.ADMIN));
-            userRepository.save(admin);
-        }
+        // Check if we already have users in the database
+        long userCount = userRepository.count();
 
-        if (userRepository.findByUsername("masteradmin").isEmpty()) {
-            User masterAdmin = new User();
-            masterAdmin.setUsername("masteradmin");
-            masterAdmin.setPassword(passwordEncoder.encode("admin123"));
-            masterAdmin.setEmail("masteradmin@lms.com");
-            masterAdmin.setRoles(Set.of(Roles.ADMIN));
-            userRepository.save(masterAdmin);
-        }
-
-        // Create teacher users if they don't exist
-        String[] teacherUsernames = {"teacher1", "teacher2", "dr_smith", "prof_johnson"};
-        for (String teacherUsername : teacherUsernames) {
-            if (userRepository.findByUsername(teacherUsername).isEmpty()) {
-                User teacher = new User();
-                teacher.setUsername(teacherUsername);
-                teacher.setPassword(passwordEncoder.encode("teacher123"));
-                teacher.setEmail(teacherUsername + "@lms.com");
-                teacher.setRoles(Set.of(Roles.ADMIN));
-                userRepository.save(teacher);
-            }
-        }
-
-        // Create 10 student users if they don't exist
+        // Define students array for later use
         String[][] students = {
             {"student1", "john.doe@student.com"},
             {"student2", "jane.smith@student.com"},
@@ -75,8 +46,37 @@ public class DataInitializer implements CommandLineRunner {
             {"student10", "rachel.taylor@student.com"}
         };
 
-        for (String[] studentInfo : students) {
-            if (userRepository.findByUsername(studentInfo[0]).isEmpty()) {
+        if (userCount > 0) {
+            System.out.println("Database already contains " + userCount + " users. Skipping user creation.");
+        } else {
+            // Create admin users if they don't exist
+            User admin = new User();
+            admin.setUsername("admin");
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setEmail("admin@lms.com");
+            admin.setRoles(Set.of(Roles.ADMIN));
+            userRepository.save(admin);
+
+            User masterAdmin = new User();
+            masterAdmin.setUsername("masteradmin");
+            masterAdmin.setPassword(passwordEncoder.encode("admin123"));
+            masterAdmin.setEmail("masteradmin@lms.com");
+            masterAdmin.setRoles(Set.of(Roles.ADMIN));
+            userRepository.save(masterAdmin);
+
+            // Create teacher users
+            String[] teacherUsernames = {"teacher1", "teacher2", "dr_smith", "prof_johnson"};
+            for (String teacherUsername : teacherUsernames) {
+                User teacher = new User();
+                teacher.setUsername(teacherUsername);
+                teacher.setPassword(passwordEncoder.encode("teacher123"));
+                teacher.setEmail(teacherUsername + "@lms.com");
+                teacher.setRoles(Set.of(Roles.ADMIN));
+                userRepository.save(teacher);
+            }
+
+            // Create 10 student users
+            for (String[] studentInfo : students) {
                 User student = new User();
                 student.setUsername(studentInfo[0]);
                 student.setPassword(passwordEncoder.encode("student123"));
@@ -88,8 +88,23 @@ public class DataInitializer implements CommandLineRunner {
 
         // Create sample courses if they don't exist
         if (courseRepository.count() == 0) {
-            User teacher1 = userRepository.findByUsername("teacher1").orElse(null);
-            User teacher2 = userRepository.findByUsername("teacher2").orElse(null);
+            // Find teachers safely
+            User teacher1 = null;
+            User teacher2 = null;
+
+            try {
+                teacher1 = userRepository.findFirstByUsername("teacher1").orElse(null);
+                teacher2 = userRepository.findFirstByUsername("teacher2").orElse(null);
+            } catch (Exception e) {
+                System.out.println("Error finding teachers: " + e.getMessage());
+                // Fallback: get any user with ADMIN role
+                var adminUsers = userRepository.findAll().stream()
+                    .filter(user -> user.getRoles() != null && user.getRoles().contains(Roles.ADMIN))
+                    .limit(2)
+                    .toList();
+                if (adminUsers.size() > 0) teacher1 = adminUsers.get(0);
+                if (adminUsers.size() > 1) teacher2 = adminUsers.get(1);
+            }
 
             if (teacher1 != null) {
                 Course course1 = new Course();
@@ -151,7 +166,14 @@ public class DataInitializer implements CommandLineRunner {
 
             // Create progress for each student in each course
             for (String[] studentInfo : students) {
-                User student = userRepository.findByUsername(studentInfo[0]).orElse(null);
+                final User student;
+                try {
+                    student = userRepository.findFirstByUsername(studentInfo[0]).orElse(null);
+                } catch (Exception e) {
+                    System.out.println("Error finding student " + studentInfo[0] + ": " + e.getMessage());
+                    // Skip this student if there's an error
+                    continue;
+                }
                 if (student != null) {
                     for (Course course : courses) {
                         // Check if progress already exists for this student-course combination

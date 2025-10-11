@@ -61,6 +61,12 @@ public class User implements UserDetails {
     )
     private List<Course> enrolledCourses;
 
+    public User() {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();

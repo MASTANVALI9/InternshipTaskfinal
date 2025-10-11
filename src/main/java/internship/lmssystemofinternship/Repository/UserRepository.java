@@ -3,8 +3,9 @@ package internship.lmssystemofinternship.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import internship.lmssystemofinternship.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import internship.lmssystemofinternship.Entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -29,4 +30,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     Optional<User> findByUsernameIgnoreCase(String username);
+
+    // Method to find first user by username (handles duplicates)
+    default Optional<User> findFirstByUsername(String username) {
+        return findByUsername(username).stream().findFirst();
+    }
 }

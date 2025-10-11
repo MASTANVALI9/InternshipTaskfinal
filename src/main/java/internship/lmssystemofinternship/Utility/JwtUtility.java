@@ -14,11 +14,20 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtility {
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
 
-    @Value("${jwt.expiration-ms:36000000}") // default 10 hours
-    private long expirationMs;
+    private String SECRET_KEY = "this-is-a-long-default-jwt-secret-key-32chars-min!!";
+
+    private long expirationMs = 36000000; // default 10 hours
+
+    @Value("${jwt.secret:this-is-a-long-default-jwt-secret-key-32chars-min!!}")
+    public void setSecretKey(String secretKey) {
+        this.SECRET_KEY = secretKey;
+    }
+
+    @Value("${jwt.expiration-ms:36000000}")
+    public void setExpirationMs(long expirationMs) {
+        this.expirationMs = expirationMs;
+    }
 
     public String generateToken(String username) {
         SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());

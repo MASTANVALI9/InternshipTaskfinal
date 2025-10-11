@@ -19,4 +19,7 @@ public class ForumPostDto {
     private boolean isPinned;
     private List<ForumReplyDto> replies;
     private int replyCount;
+
+    public void setAuthorId(long l) {
+    }
 }

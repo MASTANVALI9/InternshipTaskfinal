@@ -565,4 +565,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Note**: This LMS system is designed to be scalable, secure, and user-friendly. It provides a solid foundation for educational institutions and online learning platforms.
 
-For any issues or questions, please refer to the documentation or contact the development team.
+For any issues or questions, please refer to the documentation or contact the development team connect.
