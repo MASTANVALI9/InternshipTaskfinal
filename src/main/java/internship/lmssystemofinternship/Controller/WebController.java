@@ -27,4 +27,24 @@ public class WebController {
     public String dashboard() {
         return "dashboard";
     }
+
+    @GetMapping("/courses")
+    public String courses() {
+        return "courses";
+    }
+
+    @GetMapping("/progress")
+    public String progress() {
+        return "progress";
+    }
+
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
+
+    @GetMapping("/quiz")
+    public String quiz() {
+        return "quiz";
+    }
 }

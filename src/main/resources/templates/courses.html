@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - LMS System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #333 !important;
+        }
+        .logout-widget {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        .logout-btn-small {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
+        }
+        .logout-btn-small:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+            color: white;
+        }
+        .main-container {
+            padding: 30px 0;
+        }
+        .courses-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .course-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            transition: transform 0.3s ease;
+            margin-bottom: 30px;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+        .course-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px 20px 0 0 !important;
+            border: none;
+            padding: 20px;
+        }
+        .course-body {
+            padding: 30px;
+        }
+        .course-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .course-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .course-difficulty {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .course-duration {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .enroll-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 30px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .enroll-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        .enrolled-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 30px;
+            color: white;
+            font-weight: 600;
+            width: 100%;
+            cursor: not-allowed;
+        }
+        .search-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .search-input {
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            padding: 12px 20px;
+            font-size: 1rem;
+        }
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .filter-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 15px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            color: white;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        .no-courses {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 8px 20px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logout Widget -->
+    <div class="logout-widget">
+        <button class="logout-btn-small" onclick="logout()" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-graduation-cap me-2"></i>LMS System
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i>
+                        <span id="userDisplayName">Loading...</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="/progress"><i class="fas fa-chart-bar me-2"></i>Progress</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <!-- Header -->
+        <div class="courses-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-3"><i class="fas fa-book me-2"></i>Course Catalog</h2>
+                    <p class="text-muted">Explore our comprehensive collection of courses and enhance your skills</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="back-btn" onclick="window.location.href='/dashboard'">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="search-section">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" class="form-control search-input" id="searchInput" placeholder="Search courses by name or description...">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select search-input" id="difficultyFilter">
+                        <option value="">All Levels</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="filter-btn w-100" onclick="loadCourses()">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="row" id="coursesContainer">
+            <!-- Courses will be loaded here -->
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <i class="fas fa-spinner fa-spin fa-3x mb-3"></i>
+            <p>Loading courses...</p>
+        </div>
+
+        <!-- No Courses State -->
+        <div class="no-courses" id="noCoursesState" style="display: none;">
+            <i class="fas fa-book-open fa-3x mb-3"></i>
+            <h4>No courses found</h4>
+            <p>Try adjusting your search criteria or check back later for new courses.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allCourses = [];
+        let currentUser = {};
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+
+            if (!token || !username) {
+                window.location.href = '/login';
+                return;
+            }
+
+            // Set user information
+            document.getElementById('userDisplayName').textContent = username;
+
+            // Load user data and courses
+            loadUserData();
+            loadCourses();
+        });
+
+        async function loadUserData() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/users/profile/current', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    currentUser = await response.json();
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        async function loadCourses() {
+            try {
+                const token = localStorage.getItem('token');
+                const searchTerm = document.getElementById('searchInput').value;
+                const difficultyFilter = document.getElementById('difficultyFilter').value;
+
+                // Show loading state
+                document.getElementById('loadingState').style.display = 'block';
+                document.getElementById('coursesContainer').innerHTML = '';
+
+                const response = await fetch('/api/courses/all', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    allCourses = await response.json();
+                    displayCourses(allCourses);
+                } else {
+                    console.error('Failed to load courses');
+                    showNoCourses();
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+                showNoCourses();
+            } finally {
+                document.getElementById('loadingState').style.display = 'none';
+            }
+        }
+
+        function displayCourses(courses) {
+            const container = document.getElementById('coursesContainer');
+
+            if (courses.length === 0) {
+                showNoCourses();
+                return;
+            }
+
+            container.innerHTML = courses.map(course => `
+                <div class="col-md-6 col-lg-4">
+                    <div class="course-card">
+                        <div class="course-header">
+                            <h5 class="mb-0">${course.title}</h5>
+                        </div>
+                        <div class="course-body">
+                            <div class="course-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="course-title">${course.title}</div>
+                            <div class="course-description">${course.description || 'No description available'}</div>
+
+                            <div class="course-meta">
+                                <span class="course-difficulty">${course.difficulty || 'Beginner'}</span>
+                                <span class="course-duration">
+                                    <i class="fas fa-clock me-1"></i>${course.duration || '4 weeks'}
+                                </span>
+                            </div>
+
+                            <button class="enroll-btn" onclick="enrollInCourse(${course.id})">
+                                <i class="fas fa-plus me-2"></i>Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCourses() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const difficultyFilter = document.getElementById('difficultyFilter').value;
+
+            const filteredCourses = allCourses.filter(course => {
+                const matchesSearch = course.title.toLowerCase().includes(searchTerm) ||
+                                    (course.description && course.description.toLowerCase().includes(searchTerm));
+                const matchesDifficulty = !difficultyFilter || course.difficulty === difficultyFilter;
+
+                return matchesSearch && matchesDifficulty;
+            });
+
+            displayCourses(filteredCourses);
+        }
+
+        async function enrollInCourse(courseId) {
+            try {
+                const token = localStorage.getItem('token');
+                const enrollBtn = event.target;
+                const originalText = enrollBtn.innerHTML;
+
+                // Show loading state
+                enrollBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Enrolling...';
+                enrollBtn.disabled = true;
+
+                const response = await fetch(`/api/courses/enroll/${courseId}/student/${currentUser.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    enrollBtn.innerHTML = '<i class="fas fa-check me-2"></i>Enrolled!';
+                    enrollBtn.className = 'enrolled-btn';
+
+                    // Update course statistics on dashboard
+                    setTimeout(() => {
+                        loadCourses();
+                    }, 1000);
+                } else {
+                    throw new Error('Enrollment failed');
+                }
+            } catch (error) {
+                console.error('Error enrolling in course:', error);
+                enrollBtn.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Try Again';
+                enrollBtn.disabled = false;
+            }
+        }
+
+        function showNoCourses() {
+            document.getElementById('coursesContainer').innerHTML = '';
+            document.getElementById('noCoursesState').style.display = 'block';
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.href = '/login';
+        }
+
+        // Add event listeners for real-time search
+        document.getElementById('searchInput').addEventListener('input', filterCourses);
+        document.getElementById('difficultyFilter').addEventListener('change', filterCourses);
+    </script>
+</body>
+</html>

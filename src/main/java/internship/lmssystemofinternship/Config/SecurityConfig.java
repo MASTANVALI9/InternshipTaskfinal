@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html").permitAll()
                         .requestMatchers("/login", "/signup", "/").permitAll()
-                        .requestMatchers("/dashboard").permitAll()
+                        .requestMatchers("/dashboard", "/courses", "/progress", "/profile", "/quiz").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                         .requestMatchers("/api/users/profile").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
